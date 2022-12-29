@@ -26,7 +26,9 @@ h1, .remove-newline {
 
 .saves {
   width: 100%;
+  /* yay saves wrap to fit! */
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 }
 
@@ -36,14 +38,15 @@ h1, .remove-newline {
   background: #00aaff;
   overflow: hidden;
   border-radius: 1.5vw;
-  margin-right: 5vw;
+  margin-right: 2vw;
   margin-bottom: 10px;
   float: left;
 }
 
 .save img {
   width: 100%;
-  height: calc((9/16)*100%)
+  height: calc((9/16)*100%);
+  background: #000;
 }
 
 .save span {
@@ -51,4 +54,5 @@ h1, .remove-newline {
   text-align: center;
   width: 100%;
   display: block;
+  color: #fff !important;
 }
