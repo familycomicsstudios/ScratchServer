@@ -26,7 +26,7 @@ app.config["SECRET_KEY"] = os.environ['SECRET_KEY']
 
 def b64(string):
     return b64encode(string.encode("utf-8")).decode()
-
+#read repl chatt
 @app.route("/del/<id>")
 def delete_file(id):
     id = int(id)
