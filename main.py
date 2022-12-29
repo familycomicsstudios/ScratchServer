@@ -3,6 +3,7 @@ DO NOT OPEN PROJECT FILES!!!
 IT BREAKS THEM!
 DO NOT VIEW ANY FILES IN PROJECTS FOLDER
 """
+# Disable GIFs please
 from base64 import b64encode
 from flask import Flask
 from flask import send_from_directory, render_template, request, redirect, session, abort
@@ -11,6 +12,8 @@ from flask_cors import CORS
 import os, json, string, random
 
 app = Flask(__name__, static_folder="static")
+
+devs = ["know0your0true0color", "The_Mad_Punter", "jwklongYT"]
 
 cors = CORS(app, resources={r"/foo": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -21,22 +24,42 @@ app.config['MAX_CONTENT_PATH'] = 50000000
 app.config["SECRET_KEY"] = os.environ['SECRET_KEY']
 
 
-def base64(string):
+def b64(string):
     return b64encode(string.encode("utf-8")).decode()
-
+#read repl chatt
+@app.route("/del/<id>")
+def delete_file(id):
+    id = int(id)
+    try:
+        if not session["username"] in devs:
+            return """<script>window.location.replace("https://PMProjectServer.101freshpenguin.repl.co");</script>"""
+    except:
+        return "nono"
+    with open("names.json", "r") as nm:
+        nm = json.load(nm)
+        nm[id] = {
+        "name": "Deleted",
+        "desc": "Deleted",
+        "notes": "Deleted",
+        "file": "no", # file isnt a thing
+        "thumb": "no"
+    }
+    with open("names.json", "w") as names:
+        json.dump(nm, names, indent=4)
+        names.close()
+    return "done"
+        
 
 @app.route('/')
 def home():
     with open("names.json", "r") as nm:
         try:
             template_data = {
-              "username": session['username'],
-              "saves": nm.read()
-            }
-        except:
-            template_data = {
+                "username": session['username'],
                 "saves": nm.read()
             }
+        except:
+            template_data = {"saves": nm.read()}
     return render_template("home.html", **template_data)
 
 
@@ -111,42 +134,39 @@ def upload_file():
 
 @app.route('/uploader', methods=['GET', 'POST'])
 def uploader_file():
-    if True:
-        #if not request.form['filename'] and request.files['thumb'].read() and request.files['file'].read() == None:
-        if True:
-            #if request.files["file"].content_type == ".sb3":
-            if True:
-                name = request.form['filename']
-                letters = string.ascii_lowercase + string.ascii_uppercase + string.digits
-                filename = ''.join(random.choice(letters) for i in range(32))
-                open("projects/" + str(filename) + ".sb3", 'ab').close()
-                with open("projects/" + str(filename) + ".sb3", 'wb') as fp:
-                    fp.write(request.files['file'].read())
-                with open("names.json", "r") as nms:
-                    nms = json.load(nms)
-                project_no = len(nms)
-                if True:
-                    datas = {
-                        "id": project_no,
-                        "file": filename + ".sb3",
-                        "name": name,
-                        "desc": request.form["desc"],
-                        "notes": request.form["notes"],
-                        "thumb": str(b64encode(request.files["thumb"].read()))[2:-1]
-                    }
-                    with open("names.json", "r") as nm:
-                        nm = json.load(nm)
-                        nm.append(datas)
-                    with open("names.json", "w") as names:
-                        json.dump(nm, names, indent=4)
-                        return 'file uploaded successfully. Your ID is ' + str(
-                            project_no) + "."
-                    names.close()
-        else:
-            return render_template("badupload.html")
-    if request.method == "GET":
-        return render_template("404.html")
-    return "hi"
+    if not (request.form['filename']
+            == None) and not (request.files['thumb'].read() == None) and not (
+                request.files['file'].read()
+                == None) and request.files["file"].filename.endswith(".sb3"):
+        name = request.form['filename']
+        letters = string.ascii_lowercase + string.ascii_uppercase + string.digits
+        filename = ''.join(random.choice(letters) for i in range(32))
+        open("projects/" + str(filename) + ".sb3", 'ab').close()
+        with open("projects/" + str(filename) + ".sb3", 'wb') as fp:
+            fp.write(request.files['file'].read())
+        with open("names.json", "r") as nms:
+            nms = json.load(nms)
+        project_no = len(nms)
+        datas = {
+            "id": project_no,
+            "file": filename + ".sb3",
+            "name": name,
+            "desc": request.form["desc"],
+            "notes": request.form["notes"],
+            "thumb": str(b64encode(request.files["thumb"].read()))[2:-1]
+        }
+        with open("names.json", "r") as nm:
+            nm = json.load(nm)
+            nm.append(datas)
+        with open("names.json", "w") as names:
+            json.dump(nm, names, indent=4)
+            return 'file uploaded successfully. Your ID is ' + str(
+                project_no) + "."
+            names.close()
+    else:
+        return render_template("badupload.html")
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404

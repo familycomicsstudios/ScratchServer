@@ -46,7 +46,8 @@ h1, .remove-newline {
 
 .save img {
   width: 100%;
-  height: calc((9/16)*100%)
+  height: calc((9/16)*100%);
+  background: #000;
 }
 
 .save span {
