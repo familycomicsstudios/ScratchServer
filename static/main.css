@@ -24,19 +24,22 @@ h1, .remove-newline {
   text-align: right;
 }
 
+
 .saves {
   width: 100%;
+  /* yay saves wrap to fit! */
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 }
 
 .save {
   width: 20vw;
   height: 20vw;
-  background: #00aaff;
+  background: #00ff11;
   overflow: hidden;
   border-radius: 1.5vw;
-  margin-right: 5vw;
+  margin-right: 2vw;
   margin-bottom: 10px;
   float: left;
 }
@@ -51,4 +54,5 @@ h1, .remove-newline {
   text-align: center;
   width: 100%;
   display: block;
+  color: #fff !important;
 }

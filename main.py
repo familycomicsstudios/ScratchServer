@@ -43,7 +43,7 @@ def home():
 @app.route("/login")
 def login():
     return redirect(
-        f"https://auth.itinerary.eu.org/auth/?redirect={ base64('https://shreedprojectserver.themadpunter.repl.co/authenticate') }&name=Shred Project Sharing"
+        f"https://auth.itinerary.eu.org/auth/?redirect={ base64('https://shredprojectserver.themadpunter.repl.co/authenticate') }&name=Shred Project Sharing"
     )
 
 
