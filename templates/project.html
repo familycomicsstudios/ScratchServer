@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Shred Project Server</title>
+        <title>PM Project Server</title>
         <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
 
@@ -13,7 +13,12 @@
     </head>
     <body>
         <h1>Project {{ id }}: {{ name }}</h1><br>
-        <a class="btn btn-primary" href="https://shredmod.github.io/scratch-vm/editor.html?project_url=https://shredprojectserver.themadpunter.repl.co/projects/download/{{ id }}">Open in Scratch</a>
-        <a class="btn btn-primary" href="https://shredprojectserver.themadpunter.repl.co/projects/download/{{ id }}">Download .sb3</a>
+        <image alt="{{ name }}" src="data:image/png;base64,{{ thumb }}"></image>
+        <h3>Description</h3>
+        <p>{{ desc }}</p>
+        <h3>Notes</h3>
+        <p>{{ notes }}</p>
+        <a class="btn btn-primary" href="https://penguinmod.github.io/PenguinMod-Gui/?project_url=https://PMProjectServer.101freshpenguin.repl.co/projects/download/{{ id }}">Open in Scratch</a>
+        <a class="btn btn-primary" href="https://PMProjectServer.101freshpenguin.repl.co/projects/download/{{ id }}">Download .sb3</a>
     </body>
 </html>

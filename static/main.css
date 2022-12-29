@@ -23,3 +23,32 @@ h1, .remove-newline {
 .tar {
   text-align: right;
 }
+
+.saves {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.save {
+  width: 20vw;
+  height: 20vw;
+  background: #00aaff;
+  overflow: hidden;
+  border-radius: 1.5vw;
+  margin-right: 5vw;
+  margin-bottom: 10px;
+  float: left;
+}
+
+.save img {
+  width: 100%;
+  height: calc((9/16)*100%)
+}
+
+.save span {
+  font-size: 2vw;
+  text-align: center;
+  width: 100%;
+  display: block;
+}

@@ -1,10 +1,14 @@
+"""
+DO NOT OPEN PROJECT FILES!!!
+IT BREAKS THEM!
+DO NOT VIEW ANY FILES IN PROJECTS FOLDER
+"""
 from base64 import b64encode
 from flask import Flask
 from flask import send_from_directory, render_template, request, redirect, session, abort
-import os
-from replit import db
 from requests import get
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
+import os, json, string, random
 
 app = Flask(__name__, static_folder="static")
 
@@ -23,17 +27,23 @@ def base64(string):
 
 @app.route('/')
 def home():
-    try:
-        template_data = {"username": session['username']}
-    except:
-        template_data = {}
+    with open("names.json", "r") as nm:
+        try:
+            template_data = {
+              "username": session['username'],
+              "saves": nm.read()
+            }
+        except:
+            template_data = {
+                "saves": nm.read()
+            }
     return render_template("home.html", **template_data)
 
 
 @app.route("/login")
 def login():
     return redirect(
-        f"https://auth.itinerary.eu.org/auth/?redirect={ base64('https://ShredProjectServer.themadpunter.repl.co/authenticate') }&name=Shred Server"
+        f"https://auth.itinerary.eu.org/auth/?redirect={ base64('https://PMProjectServer.101Freshpenguin.repl.co/authenticate') }&name=PM Project Sharing"
     )
 
 
@@ -65,21 +75,29 @@ def logout():
 
 @app.route('/projects/download/<path>')
 def send_report(path):
+    with open("names.json", "r") as nm:
+        nm = json.load(nm)
     try:
-        return send_from_directory('projects', db["projects"][path]["file"])
-    except KeyError:
+        return send_from_directory('projects', nm[int(path)]["file"])
+    except IndexError:
         abort(404)
 
 
 @app.route('/project/<id>')
 def project(id):
+    with open("names.json", "r") as nm:
+        nm = json.load(nm)
     try:
-        template_data = {'id': id, 'name': db["projects"][id]['name']}
+        template_data = {
+            'id': id,
+            'name': nm[int(id)]['name'],
+            'notes': nm[int(id)]['notes'],
+            'desc': nm[int(id)]['desc'],
+            'thumb': nm[int(id)]['thumb']
+        }
         return render_template("project.html", **template_data)
-    except KeyError:
+    except IndexError:
         abort(404)
-
-    
 
 
 @app.route('/upload')
@@ -93,34 +111,51 @@ def upload_file():
 
 @app.route('/uploader', methods=['GET', 'POST'])
 def uploader_file():
-    global db
-    dir_path = 'projects'
-    count = 0
-    # Iterate directory
-    for path in os.listdir(dir_path):
-        # check if current path is a file
-        if os.path.isfile(os.path.join(dir_path, path)):
-            count += 1
-    if request.method == 'POST':
-        f = request.files['file']
-        name = request.form['filename']
-        filename = str(os.urandom(16))
-        project_no = len(db["projects"]) + 1
-        f.save("projects/" + str((filename)) + ".sb3")
-        db["projects"][str(project_no - 1)] = {
-            "id": project_no,
-            "file": filename + ".sb3",
-            "name": name
-        }
-        return 'file uploaded successfully'
-
+    if True:
+        #if not request.form['filename'] and request.files['thumb'].read() and request.files['file'].read() == None:
+        if True:
+            #if request.files["file"].content_type == ".sb3":
+            if True:
+                name = request.form['filename']
+                letters = string.ascii_lowercase + string.ascii_uppercase + string.digits
+                filename = ''.join(random.choice(letters) for i in range(32))
+                open("projects/" + str(filename) + ".sb3", 'ab').close()
+                with open("projects/" + str(filename) + ".sb3", 'wb') as fp:
+                    fp.write(request.files['file'].read())
+                with open("names.json", "r") as nms:
+                    nms = json.load(nms)
+                project_no = len(nms)
+                if True:
+                    datas = {
+                        "id": project_no,
+                        "file": filename + ".sb3",
+                        "name": name,
+                        "desc": request.form["desc"],
+                        "notes": request.form["notes"],
+                        "thumb": str(b64encode(request.files["thumb"].read()))[2:-1]
+                    }
+                    with open("names.json", "r") as nm:
+                        nm = json.load(nm)
+                        nm.append(datas)
+                    with open("names.json", "w") as names:
+                        json.dump(nm, names, indent=4)
+                        return 'file uploaded successfully. Your ID is ' + str(
+                            project_no) + "."
+                    names.close()
+        else:
+            return render_template("badupload.html")
+    if request.method == "GET":
+        return render_template("404.html")
+    return "hi"
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
 @app.errorhandler(500)
 def we_did_an_oopsie(e):
     return render_template('500.html'), 500
+
 
 CORS(app)
 

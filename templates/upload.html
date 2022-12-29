@@ -16,10 +16,21 @@
       <form action = "/uploader" method = "POST" 
          enctype = "multipart/form-data">
           <input type="text" name="filename"
-               placeholder="Untitled"
+               placeholder="name/title"
                value="{{ request.form['filename'] }}"></input>
         <br>
-         <input type = "file" name = "file" accept = ".sb3"/><br>
+         <input type="text" name="desc"
+               placeholder="description"
+               value="{{ request.form['desc'] }}"></input>
+        <br>
+          <input type="text" name="notes"
+               placeholder="notes"
+               value="{{ request.form['notes'] }}"></input>
+        <br>
+          <p>thumbnail:</p>
+          <input type = "file" name = "thumb" accept = "image/*"/>
+          <p>file:</p>
+          <input type = "file" name = "file" accept = ".sb3"/>
          <input type = "submit"/>
       </form>
        {% else %}
