@@ -34,7 +34,6 @@
         <br>
         <br>
         <br>
-        <span id="savesText">Saves:</span>
         <div id="saves" class="saves">
         </div>
         <script>
@@ -43,6 +42,7 @@
             for (let i = 0; i < saves.length; i++) {
               const save = saves[i]
               console.log(el, i, document.getElementById('saves'), document)
+                if (save.name != "Deleted") {
               el.innerHTML += `
               <a href="${'/project/' + i}">
                 <div id="save${i}" class="save">
@@ -50,6 +50,7 @@
                   <span>${saves[i].name}</span>
                 </div>
               </a>`
+                }
             }
         </script>
     </body>
